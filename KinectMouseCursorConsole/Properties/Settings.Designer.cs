@@ -34,7 +34,7 @@ namespace KinectMouseCursorConsole.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1500")]
         public int Scale {
             get {
                 return ((int)(this["Scale"]));
@@ -61,19 +61,19 @@ namespace KinectMouseCursorConsole.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int RangeInZ {
+        [global::System.Configuration.DefaultSettingValueAttribute("0.6")]
+        public double RangeInZ {
             get {
-                return ((int)(this["RangeInZ"]));
+                return ((double)(this["RangeInZ"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int RangeOutZ {
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double RangeOutZ {
             get {
-                return ((int)(this["RangeOutZ"]));
+                return ((double)(this["RangeOutZ"]));
             }
         }
         

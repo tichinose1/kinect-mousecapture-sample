@@ -50,6 +50,20 @@ namespace KinectMouseCursorConsole
                     PInvoke.PerformMoveCursor(a.X, a.Y);
                 });
 
+            // 長押し
+            // 一定期間内に指先が常に指定範囲内にいるかどうかを監視
+            // クリック後は手前に引く必要あり
+            raw
+                .Select(p => p.Z < Settings.Default.RangeInZ)
+                .Buffer(TimeSpan.FromSeconds(Settings.Default.LongClickTime))
+                .Select(bs => bs.All(b => b))
+                .DistinctUntilChanged()
+                .Where(b => b)
+                .Subscribe(_ =>
+                {
+                    PInvoke.PerformClick();
+                });
+
             Console.ReadKey();
         }
 
