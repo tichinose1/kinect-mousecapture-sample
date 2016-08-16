@@ -4,8 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Runtime.InteropServices;
-using System.Windows.Input;
+using System.Threading.Tasks;
 
 namespace KinectMouseCursorConsole
 {
@@ -15,9 +14,9 @@ namespace KinectMouseCursorConsole
         {
             var sensor = KinectSensor.GetDefault();
             var reader = sensor.BodyFrameSource.OpenReader();
-            sensor.Open();
+            Task.Run(() => sensor.Open());
 
-            var bodies = Observable.Interval(TimeSpan.FromSeconds(1.0 / Settings.Default.FPS))
+            var raw = Observable.Interval(TimeSpan.FromSeconds(1.0 / Settings.Default.FPS))
                 .Select(_ =>
                 {
                     using (var frame = reader.AcquireLatestFrame())
@@ -28,31 +27,36 @@ namespace KinectMouseCursorConsole
                         frame.GetAndRefreshBodyData(data);
                         return data;
                     }
-                });
-            var body = bodies
+                })
                 .Where(bs => bs != null)
-                .Select(bs => bs.Where(b => b.IsTracked).FirstOrDefault());
-            var handRight = body
+                .Select(bs => bs.Where(b => b.IsTracked).FirstOrDefault())
                 .Where(b => b != null)
-                .Select(b => b.Joints[JointType.HandRight]);
-            var handRightPosition = handRight
-                .Select(h => h.Position)
-                .Do(p => Debug.WriteLine($"X: {p.X}, Y: {p.Y}"));
-            handRightPosition
-                .Subscribe(p =>
+                .Select(b => b.Joints[JointType.HandRight])
+                .Do(h => Debug.WriteLine($"X: {h.Position.X}, Y: {h.Position.Y}, Z: {h.Position.Z}"))
+                .Select(h => h.Position);
+
+            // カーソル移動
+            // 座標変換後、指定の数値の倍数に丸める
+            raw
+                .Select(p => new
                 {
-                    var x = (1920 / 2) + p.X * Settings.Default.Scale;
-                    var y = (1080 / 2) - p.Y * Settings.Default.Scale;
-
-                    SetCursorPos((int)x, (int)y);
-
-                    if (p.Z > 0.8) Debug.WriteLine("hoge");
+                    X = Settings.Default.ScreenX / 2 + Settings.Default.Scale * p.X,
+                    Y = Settings.Default.ScreenY / 2 - Settings.Default.Scale * p.Y
+                })
+                .Select(a => new { X = Round(a.X), Y = Round(a.Y) })
+                .DistinctUntilChanged()
+                .Subscribe(a =>
+                {
+                    PInvoke.PerformMoveCursor(a.X, a.Y);
                 });
 
             Console.ReadKey();
         }
 
-        [DllImport("User32.dll")]
-        private static extern bool SetCursorPos(int X, int Y);
+        static int Round(double originalValue)
+        {
+            var n = Settings.Default.RoundCoefficient;
+            return ((int)originalValue / n) * n;
+        }
     }
 }
