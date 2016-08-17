@@ -34,7 +34,7 @@ namespace KinectMouseCursorConsole.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1500")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
         public int Scale {
             get {
                 return ((int)(this["Scale"]));
@@ -43,7 +43,7 @@ namespace KinectMouseCursorConsole.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1920")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1024")]
         public int ScreenX {
             get {
                 return ((int)(this["ScreenX"]));
@@ -52,7 +52,7 @@ namespace KinectMouseCursorConsole.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1080")]
+        [global::System.Configuration.DefaultSettingValueAttribute("768")]
         public int ScreenY {
             get {
                 return ((int)(this["ScreenY"]));
@@ -61,7 +61,7 @@ namespace KinectMouseCursorConsole.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.6")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
         public double RangeInZ {
             get {
                 return ((double)(this["RangeInZ"]));
@@ -70,7 +70,7 @@ namespace KinectMouseCursorConsole.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
         public double RangeOutZ {
             get {
                 return ((double)(this["RangeOutZ"]));

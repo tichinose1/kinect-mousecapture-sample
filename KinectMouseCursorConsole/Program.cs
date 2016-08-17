@@ -40,7 +40,7 @@ namespace KinectMouseCursorConsole
             raw
                 .Select(p => new
                 {
-                    X = Settings.Default.ScreenX / 2 + Settings.Default.Scale * p.X,
+                    X = Settings.Default.ScreenX / 2 - Settings.Default.Scale * p.X,
                     Y = Settings.Default.ScreenY / 2 - Settings.Default.Scale * p.Y
                 })
                 .Select(a => new { X = Round(a.X), Y = Round(a.Y) })
@@ -54,7 +54,7 @@ namespace KinectMouseCursorConsole
             // 一定期間内に指先が常に指定範囲内にいるかどうかを監視
             // クリック後は手前に引く必要あり
             raw
-                .Select(p => p.Z < Settings.Default.RangeInZ)
+                .Select(p => p.Z > Settings.Default.RangeInZ)
                 .Buffer(TimeSpan.FromSeconds(Settings.Default.LongClickTime))
                 .Select(bs => bs.All(b => b))
                 .DistinctUntilChanged()
