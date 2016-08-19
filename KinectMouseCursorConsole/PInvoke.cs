@@ -11,11 +11,7 @@ namespace KinectMouseCursorConsole
         const int LOGPIXELSY = 90;
         static readonly IntPtr hdc = GetDC(IntPtr.Zero);
 
-        public static void PerformClick()
-        {
-            mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-            mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-        }
+        public static void PerformClick() => mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
 
         public static void PerformMoveCursor(int x, int y) => SetCursorPos(x, y);
 

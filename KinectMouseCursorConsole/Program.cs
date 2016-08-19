@@ -13,21 +13,17 @@ namespace KinectMouseCursorConsole
     {
         static void Main(string[] args)
         {
-            var dpiX = PInvoke.GetDpiX();
-            var dpiY = PInvoke.GetDpiY();
-            Console.WriteLine($"dpiX: {dpiX}");
-            Console.WriteLine($"dpiY: {dpiY}");
+            Execute();
 
-            const double LogicalInch = 96;
-            var dipX = (double)dpiX / LogicalInch;
-            var dipY = (double)dpiY / LogicalInch;
-            Console.WriteLine($"dipX: {dipX}");
-            Console.WriteLine($"dipY: {dipY}");
+            Console.ReadLine();
+        }
 
-            var primaryScreenWidth = SystemParameters.PrimaryScreenWidth * dipX;
-            var primaryScreenHeight = SystemParameters.PrimaryScreenHeight * dipY;
-            Console.WriteLine($"primaryScreenWidth: {primaryScreenWidth}");
-            Console.WriteLine($"primaryScreenHeight: {primaryScreenHeight}");
+        private static double primaryScreenWidth = 0d;
+        private static double primaryScreenHeight = 0d;
+
+        private static void Execute()
+        {
+            CalculateScreenSize();
 
             var sensor = KinectSensor.GetDefault();
             var reader = sensor.BodyFrameSource.OpenReader();
@@ -88,14 +84,29 @@ namespace KinectMouseCursorConsole
                 {
                     PInvoke.PerformClick();
                 });
-
-            Console.ReadKey();
         }
 
-        static int Round(double originalValue)
+        static void CalculateScreenSize()
         {
-            var n = Settings.Default.RoundCoefficient;
-            return ((int)originalValue / n) * n;
+            var dpiX = PInvoke.GetDpiX();
+            var dpiY = PInvoke.GetDpiY();
+            Console.WriteLine($"dpiX: {dpiX}");
+            Console.WriteLine($"dpiY: {dpiY}");
+
+            const double LogicalInch = 96;
+            var dipX = (double)dpiX / LogicalInch;
+            var dipY = (double)dpiY / LogicalInch;
+            Console.WriteLine($"dipX: {dipX}");
+            Console.WriteLine($"dipY: {dipY}");
+
+            primaryScreenWidth = SystemParameters.PrimaryScreenWidth * dipX;
+            primaryScreenHeight = SystemParameters.PrimaryScreenHeight * dipY;
+            Console.WriteLine($"primaryScreenWidth: {primaryScreenWidth}");
+            Console.WriteLine($"primaryScreenHeight: {primaryScreenHeight}");
         }
+
+        static int Round(double originalValue) => Round(originalValue, Settings.Default.RoundCoefficient);
+
+        static int Round(double originalValue, int n) => ((int)originalValue / n) * n;
     }
 }
