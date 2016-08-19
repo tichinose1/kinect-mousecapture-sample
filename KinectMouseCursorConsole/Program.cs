@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace KinectMouseCursorConsole
 {
@@ -12,6 +13,22 @@ namespace KinectMouseCursorConsole
     {
         static void Main(string[] args)
         {
+            var dpiX = PInvoke.GetDpiX();
+            var dpiY = PInvoke.GetDpiY();
+            Console.WriteLine($"dpiX: {dpiX}");
+            Console.WriteLine($"dpiY: {dpiY}");
+
+            const double LogicalInch = 96;
+            var dipX = (double)dpiX / LogicalInch;
+            var dipY = (double)dpiY / LogicalInch;
+            Console.WriteLine($"dipX: {dipX}");
+            Console.WriteLine($"dipY: {dipY}");
+
+            var primaryScreenWidth = SystemParameters.PrimaryScreenWidth * dipX;
+            var primaryScreenHeight = SystemParameters.PrimaryScreenHeight * dipY;
+            Console.WriteLine($"primaryScreenWidth: {primaryScreenWidth}");
+            Console.WriteLine($"primaryScreenHeight: {primaryScreenHeight}");
+
             var sensor = KinectSensor.GetDefault();
             var reader = sensor.BodyFrameSource.OpenReader();
             Task.Run(() => sensor.Open());
@@ -32,21 +49,29 @@ namespace KinectMouseCursorConsole
                 .Select(bs => bs.Where(b => b.IsTracked).FirstOrDefault())
                 .Where(b => b != null)
                 .Select(b => b.Joints[JointType.HandRight])
-                .Do(h => Debug.WriteLine($"X: {h.Position.X}, Y: {h.Position.Y}, Z: {h.Position.Z}"))
                 .Select(h => h.Position);
+
+            raw
+                .Subscribe(p => Debug.WriteLine($"X: {p.X}, Y: {p.Y}, Z: {p.Z}"));
 
             // カーソル移動
             // 座標変換後、指定の数値の倍数に丸める
             raw
                 .Select(p => new
                 {
-                    X = Settings.Default.ScreenX / 2 - Settings.Default.Scale * p.X,
-                    Y = Settings.Default.ScreenY / 2 - Settings.Default.Scale * p.Y
+                    X = primaryScreenWidth / 2 - Settings.Default.Scale * p.X,
+                    Y = primaryScreenHeight / 2 - Settings.Default.Scale * p.Y,
                 })
-                .Select(a => new { X = Round(a.X), Y = Round(a.Y) })
-                .DistinctUntilChanged()
+                //.Do(a => Debug.WriteLine($"a.X: {a.X}, a.Y: {a.Y}"))
+                .Select(a => new
+                {
+                    X = Round(a.X),
+                    Y = Round(a.Y),
+                })
+                //.DistinctUntilChanged()
                 .Subscribe(a =>
                 {
+                    //Debug.WriteLine($"a.X: {a.X}, a.Y: {a.Y}");
                     PInvoke.PerformMoveCursor(a.X, a.Y);
                 });
 
