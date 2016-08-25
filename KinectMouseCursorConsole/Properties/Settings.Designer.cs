@@ -43,7 +43,7 @@ namespace KinectMouseCursorConsole.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.6")]
         public double RangeInZ {
             get {
                 return ((double)(this["RangeInZ"]));
@@ -92,6 +92,15 @@ namespace KinectMouseCursorConsole.Properties {
         public int DirectionY {
             get {
                 return ((int)(this["DirectionY"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public int DirectionZ {
+            get {
+                return ((int)(this["DirectionZ"]));
             }
         }
     }
