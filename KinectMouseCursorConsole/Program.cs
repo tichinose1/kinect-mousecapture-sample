@@ -55,8 +55,8 @@ namespace KinectMouseCursorConsole
             raw
                 .Select(p => new
                 {
-                    X = primaryScreenWidth / 2 - Settings.Default.Scale * p.X,
-                    Y = primaryScreenHeight / 2 - Settings.Default.Scale * p.Y,
+                    X = primaryScreenWidth / 2 + Settings.Default.DirectionX * Settings.Default.Scale * p.X,
+                    Y = primaryScreenHeight / 2 + Settings.Default.DirectionY * Settings.Default.Scale * p.Y,
                 })
                 //.Do(a => Debug.WriteLine($"a.X: {a.X}, a.Y: {a.Y}"))
                 .Select(a => new

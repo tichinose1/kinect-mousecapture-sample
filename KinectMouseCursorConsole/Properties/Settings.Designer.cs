@@ -76,5 +76,23 @@ namespace KinectMouseCursorConsole.Properties {
                 return ((int)(this["RoundCoefficient"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int DirectionX {
+            get {
+                return ((int)(this["DirectionX"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public int DirectionY {
+            get {
+                return ((int)(this["DirectionY"]));
+            }
+        }
     }
 }
